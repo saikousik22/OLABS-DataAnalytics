@@ -13,14 +13,6 @@ This analytics infrastructure enables multidimensional tracking of student engag
 - **Data Visualization**: Chart.js
 - **AI Integration**: Fine-tuned LLM agent for feedback and learning insights
 
-## Demo Video
-
-**[Watch demo video](./demo.mp4)
-
-The demo video showcases the complete functionality of the system including the user interface, analytics features, and administrative controls.
-
-![Dashboard Preview](https://via.placeholder.com/800x400?text=OLabs+NextG+Dashboard+Preview)
-
 ## Features
 
 ### Student Engagement Analysis
