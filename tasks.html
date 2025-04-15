@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Assign Task</title>
+    <script>
+        function assignTask() {
+            const teacherId = localStorage.getItem("teacherId"); 
+            const taskName = document.getElementById("taskName").value;
+            const studentIds = document.getElementById("studentIds").value.split(",").map(id => id.trim()); // Convert CSV to Array
+            const duration = parseInt(document.getElementById("duration").value); // Get duration in days
+
+            const taskData = {
+                teacherId: teacherId,
+                task: taskName,
+                studentIds: studentIds,
+                duration: duration
+            };
+
+            fetch("http://localhost:5000/assign", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(taskData)
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+    <style>
+        /* Background Styling */
+        body {
+            background: url(task.jpg) no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Centering Container */
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 350px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Input Fields Styling */
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        input::placeholder {
+            font-size: 14px;
+            color: #777;
+        }
+
+        /* Assign Task Button */
+        button {
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(90deg, #0056b3, #004494);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Assign Task to Students</h2>
+        <label>Task Name:</label>
+        <input type="text" id="taskName" placeholder="Enter Task (e.g., Reflection)" required><br><br>
+
+        <label>Student IDs (comma-separated):</label>
+        <input type="text" id="studentIds" placeholder="1,2,3,4,5,6" required><br><br>
+
+        <label>Duration (Days):</label>
+        <input type="number" id="duration" placeholder="Enter days (e.g., 2)" required><br><br>
+
+        <button onclick="assignTask()">Assign Task</button>
+    </div>
+</body>
+</html>

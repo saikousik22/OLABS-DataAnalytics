@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Performance Gauge</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .gauge-container { position: relative; display: inline-block; }
+        .arrow {
+            position: absolute;
+            width: 4px;
+            height: 50px;
+            background: red;
+            left: 50%;
+            bottom: 20px;
+            transform-origin: bottom;
+            transition: transform 1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <h2>Quiz Performance</h2>
+    <div class="gauge-container">
+        <canvas id="gaugeChart" width="300" height="150"></canvas>
+        <div class="arrow" id="arrow"></div>
+    </div>
+    
+    <script>
+        function getRotationAngle(score) {
+            if (score >= 9) return 60;    // Advanced (right-most)
+            if (score >= 5) return 0;     // Intermediate (middle)
+            return -60;                   // Beginner (left-most)
+        }
+
+        function getAverageScore() {
+            // Replace this with actual data logic if needed
+            return 10; // Simulating score between 0-10
+        }
+
+        function updateGauge() {
+            const userScore = getAverageScore();
+            console.log("User Score:", userScore);
+
+            const ctx = document.getElementById("gaugeChart").getContext("2d");
+            new Chart(ctx, {
+                type: "doughnut",
+                data: {
+                    labels: ["Beginner", "Intermediate", "Advanced"],
+                    datasets: [{
+                        data: [1, 1, 1],  // Equal sections
+                        backgroundColor: ["lightblue", "blue", "green"],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    cutout: "80%",
+                    rotation: -90,
+                    circumference: 180,
+                    plugins: {
+                        legend: { 
+                            display: true,
+                            labels: { 
+                                generateLabels: function(chart) {
+                                    return chart.data.labels.map((label, i) => ({
+                                        text: label, 
+                                        fillStyle: chart.data.datasets[0].backgroundColor[i],
+                                        hidden: false
+                                    }));
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    return tooltipItem.label;  // Show only label, no numbers
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Move arrow dynamically
+            document.getElementById("arrow").style.transform = `translateX(-50%) rotate(${getRotationAngle(userScore)}deg)`;
+        }
+
+        updateGauge();
+    </script>
+</body>
+</html>

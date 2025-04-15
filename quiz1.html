@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Theory Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .quiz-container {
+            width: 60%;
+            margin: auto;
+            text-align: left;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Set Theory Quiz</h1>
+    
+    <div class="quiz-container">
+        <form id="quizForm">
+            <div class="question">
+                <p>1. What is the definition of a set?</p>
+                <input type="radio" name="q1" value="A collection of well-defined objects"> A collection of well-defined objects<br>
+                <input type="radio" name="q1" value="A random group of numbers"> A random group of numbers<br>
+                <input type="radio" name="q1" value="A single number"> A single number<br>
+            </div>
+
+            <div class="question">
+                <p>2. What is the symbol for the universal set?</p>
+                <input type="radio" name="q2" value="U"> U<br>
+                <input type="radio" name="q2" value="∅"> ∅<br>
+                <input type="radio" name="q2" value="⊆"> ⊆<br>
+            </div>
+
+            <div class="question">
+                <p>3. What is the empty set?</p>
+                <input type="radio" name="q3" value="A set with no elements"> A set with no elements<br>
+                <input type="radio" name="q3" value="A set with one element"> A set with one element<br>
+                <input type="radio" name="q3" value="A set with infinite elements"> A set with infinite elements<br>
+            </div>
+
+            <div class="question">
+                <p>4. What does A ∩ B represent?</p>
+                <input type="radio" name="q4" value="Intersection of sets A and B"> Intersection of sets A and B<br>
+                <input type="radio" name="q4" value="Union of sets A and B"> Union of sets A and B<br>
+                <input type="radio" name="q4" value="Difference of sets A and B"> Difference of sets A and B<br>
+            </div>
+
+            <div class="question">
+                <p>5. What does A ∪ B represent?</p>
+                <input type="radio" name="q5" value="Union of sets A and B"> Union of sets A and B<br>
+                <input type="radio" name="q5" value="Intersection of sets A and B"> Intersection of sets A and B<br>
+                <input type="radio" name="q5" value="Complement of A"> Complement of A<br>
+            </div>
+
+            <div class="question">
+                <p>6. What is the complement of a set A?</p>
+                <input type="radio" name="q6" value="Elements not in A but in the universal set"> Elements not in A but in the universal set<br>
+                <input type="radio" name="q6" value="Elements only in A"> Elements only in A<br>
+                <input type="radio" name="q6" value="Elements in both A and B"> Elements in both A and B<br>
+            </div>
+
+            <div class="question">
+                <p>7. If A ⊆ B, what does this mean?</p>
+                <input type="radio" name="q7" value="A is a subset of B"> A is a subset of B<br>
+                <input type="radio" name="q7" value="A is a superset of B"> A is a superset of B<br>
+                <input type="radio" name="q7" value="A and B are disjoint"> A and B are disjoint<br>
+            </div>
+
+            <div class="question">
+                <p>8. What is the power set of {1,2}?</p>
+                <input type="radio" name="q8" value="{∅, {1}, {2}, {1,2}}"> {∅, {1}, {2}, {1,2}}<br>
+                <input type="radio" name="q8" value="{1,2}"> {1,2}<br>
+                <input type="radio" name="q8" value="{{1}, {2}}"> {{1}, {2}}<br>
+            </div>
+
+            <div class="question">
+                <p>9. What is the cardinality of the set {a, b, c, d}?</p>
+                <input type="radio" name="q9" value="4"> 4<br>
+                <input type="radio" name="q9" value="3"> 3<br>
+                <input type="radio" name="q9" value="5"> 5<br>
+            </div>
+
+            <div class="question">
+                <p>10. What does it mean if two sets are disjoint?</p>
+                <input type="radio" name="q10" value="They have no elements in common"> They have no elements in common<br>
+                <input type="radio" name="q10" value="They are identical"> They are identical<br>
+                <input type="radio" name="q10" value="One is a subset of the other"> One is a subset of the other<br>
+            </div>
+
+            <button type="button" id="evaluateBtn">Self Evaluate</button>
+        </form>
+
+        <p id="scoreDisplay"></p>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let userId = localStorage.getItem("userId");
+            let moduleId = localStorage.getItem("currentModule");
+
+            if (!userId || !moduleId) {
+                alert("User ID or Module ID not found! Please log in.");
+                return;
+            }
+
+            document.getElementById("evaluateBtn").addEventListener("click", function () {
+                let score = calculateScore();
+                let attempt = 1;
+
+                document.getElementById("scoreDisplay").innerText = `Your Score: ${score}/10`;
+
+                let quizData = {
+                    userId: userId,
+                    moduleId: moduleId,
+                    attempt: attempt,
+                    score: score
+                };
+
+                let answersList = [];
+
+                let correctAnswers = {
+                    q1: "A collection of well-defined objects",
+                q2: "U",
+                q3: "A set with no elements",
+                q4: "Intersection of sets A and B",
+                q5: "Union of sets A and B",
+                q6: "Elements not in A but in the universal set",
+                q7: "A is a subset of B",
+                q8: "{∅, {1}, {2}, {1,2}}",
+                q9: "4",
+                q10: "They have no elements in common"
+                };
+
+                for (let key in correctAnswers) {
+                    let selected = document.querySelector(`input[name="${key}"]:checked`);
+                    let questionElement = document.querySelector(`input[name="${key}"]`).closest('.question').querySelector('p');
+                    let questionText = questionElement ? questionElement.innerText : "Question not found";
+                    let userAnswer = selected ? selected.value : "Not Answered";
+
+                    answersList.push({
+                        question: questionText, 
+                        correctAnswer: correctAnswers[key], 
+                        userAnswer: userAnswer
+                    });
+                }
+
+                fetch(`http://localhost:5000/chatbot`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ answers: answersList })
+                })
+                .then(response => response.json())
+                .then(data => console.log("Quiz responses submitted:", data))
+                .catch(error => console.error("Error submitting quiz responses:", error));
+
+                fetch(`http://localhost:5000/storeQuizScore/${userId}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(quizData)
+                })
+                .then(response => response.json())
+                .then(data => console.log("Quiz score submitted:", data))
+                .catch(error => console.error("Error submitting quiz score:", error));
+            });
+        });
+
+        function calculateScore() {
+            let correctAnswers = {
+                q1: "A collection of well-defined objects",
+                q2: "U",
+                q3: "A set with no elements",
+                q4: "Intersection of sets A and B",
+                q5: "Union of sets A and B",
+                q6: "Elements not in A but in the universal set",
+                q7: "A is a subset of B",
+                q8: "{∅, {1}, {2}, {1,2}}",
+                q9: "4",
+                q10: "They have no elements in common"
+            };
+
+            let score = 0;
+            for (let key in correctAnswers) {
+                let selected = document.querySelector(`input[name="${key}"]:checked`);
+                if (selected && selected.value === correctAnswers[key]) {
+                    score++;
+                }
+            }
+            return score;
+        }
+    </script>
+    
+</body>
+</html>

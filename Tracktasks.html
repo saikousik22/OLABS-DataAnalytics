@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Assignment Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="Tracktasks.js"></script>
+    <style>
+        /* Flexbox container for charts */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Chart container styling */
+        .chart-container {
+            width: 40%;
+            max-width: 450px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out, background 0.3s;
+            text-align: center;
+        }
+
+        /* Hover effect for charts */
+        .chart-container:hover {
+            transform: scale(1.05);
+            background-color: #d1e7ff; /* Light blue hover effect */
+        }
+
+        /* Styling for pie chart */
+        .pie-container {
+            width: 600px;
+            height: 600px;
+            margin: auto;
+        }
+
+        /* Canvas responsive styling */
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        /* Bar chart specific styling */
+        #barChart {
+            width: 500px !important;
+            height: 300px !important;
+            max-width: 100%;
+            max-height: 100%;
+        }
+        #labchart{
+            height: 100px;
+        }
+        /* Gauge chart container * /
+        .gauge-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Red arrow inside gauge */
+        .arrow {
+            position: absolute;
+            width: 4px;
+            height: 50px;
+            background: red;
+            left: 50%;
+            bottom: 20px;
+            transform-origin: bottom;
+            transition: transform 1s ease-in-out;
+        }
+
+        /* Progress stats container */
+        .stats-container {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .completed-text {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center;">Lab Assignments for Student</h1>
+
+    <div class="container">
+        <!-- Pie Chart for Lab Assignments -->
+        <div class="chart-container">
+            <h2>Labs Assigned</h2>
+            <canvas id="labChart"></canvas>
+        </div>
+
+        <!-- Pie Chart for Completion Progress -->
+        <div class="chart-container">
+            <h2>Completion Progress</h2>
+            <div class="stats-container">
+                <p class="completed-text">Completed Labs: <span id="completedLabs">0</span> / <span id="totalLabs">0</span></p>
+            </div>
+            <canvas id="completionChart"></canvas>
+        </div>
+
+        <!-- Bar Chart for Assigned Labs vs Days Left -->
+        <div class="chart-container">
+            <h2>Assigned Labs vs Days Left</h2>
+            <canvas id="barChart"></canvas>
+        </div>
+    </div>
+
+</body>
+</html>

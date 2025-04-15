@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLabs Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* Centers content vertically */
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        .card {
+            width: 220px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: scale(1.1);
+        }
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .card h3 {
+            margin-top: 10px;
+        }
+        
+        /* Centering buttons */
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        /* Animated Buttons */
+        .action-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, background 0.3s;
+        }
+
+        .action-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to OLabs</h1>
+
+    <div class="container">
+        <div class="card" onclick="navigateTo('maths')">
+            <img src="maths.jpg" alt="Maths">
+            <h3>Maths</h3>
+        </div>
+
+        <div class="card" onclick="navigateTo('physics')">
+            <img src="physics" alt="Physics">
+            <h3>Physics</h3>
+        </div>
+
+        <div class="card" onclick="navigateTo('chemistry')">
+            <img src="chemistry" alt="Chemistry">
+            <h3>Chemistry</h3>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <button class="action-btn" onclick="trackData()">Track Your Data</button>
+        <button class="action-btn" onclick="trackTask()">Track Your Tasks</button>
+        <button class="action-btn" onclick="tracksimulation()">Track Your Simulations</button>
+    </div>
+
+    <script>
+        function navigateTo(subject) {
+            window.location.href = subject + ".html";  // Redirect to subject page
+        }
+
+        function trackData() {
+            let userId = localStorage.getItem("userId");
+
+            if (!userId) {
+                alert("User ID not found! Please log in.");
+                return;
+            }
+
+            // Redirect to visualization page
+            window.open("visualization.html", "_blank"); 
+        }
+        function trackTask() {
+    let userId = localStorage.getItem("userId");
+
+    if (!userId) {
+        alert("User ID not found! Please log in.");
+        return;
+    }
+
+    // Redirect to visualization page
+    window.open("Tracktasks.html", "_blank"); 
+    }
+    function tracksimulation() {
+    let userId = localStorage.getItem("userId");
+
+    if (!userId) {
+        alert("User ID not found! Please log in.");
+        return;
+    }
+
+    // Redirect to visualization page
+    window.open("simulation_dashboard.html", "_blank"); 
+    }
+    </script>
+
+</body>
+</html>

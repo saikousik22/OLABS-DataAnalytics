@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Topics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .chemistry-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #0b3d91;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 20px;
+            font-size: 22px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #114b8a52;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, background 0.3s;
+            min-width: 200px;
+        }
+
+        button:hover {
+            background-color: #092441;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <img src="chemistry" alt="Chemistry" class="chemistry-image">
+    <h1>Chemistry Topics</h1>
+
+    <h2>Class 12</h2>
+    <div class="button-container">
+        <button onclick="startActivity('c5')">Thermochemistry</button>
+        <button onclick="startActivity('c6')">Determination of EMF of Cell</button>
+    </div>
+
+    <h2>Class 11</h2>
+    <div class="button-container">
+        <button onclick="startActivity('c3')">Determination of pH</button>
+        <button onclick="startActivity('c4')">Chemical Equilibrium</button>
+    </div>
+
+    <h2>Class 10</h2>
+    <div class="button-container">
+        <button onclick="startActivity('c1')">Decomposition Reaction</button>
+        <button onclick="startActivity('c2')">Displacement Reaction</button>
+    </div>
+
+    <script src="activity.js"></script>
+</body>
+</html>

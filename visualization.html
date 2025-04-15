@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Data Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script defer src="visualization.js"></script>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Center the main heading */
+h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-top: 20px;
+    color: #0b3d91;
+}
+
+/* Flexbox for proper alignment */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Ensure charts align properly */
+.chart-container {
+    width: 40%;
+    max-width: 450px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, background 0.3s;
+}
+
+/* Hover effect for animation */
+.chart-container:hover {
+    transform: scale(1.05);
+    background-color: #d1e7ff; /* Light blue effect */
+}
+
+/* Adjust gauge chart */
+.gauge-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* Red arrow inside gauge */
+.arrow {
+    position: absolute;
+    width: 4px;
+    height: 50px;
+    background: red;
+    left: 50%;
+    bottom: 20px;
+    transform-origin: bottom;
+    transition: transform 1s ease-in-out;
+}
+
+/* Set max sizes for charts */
+#scoreChart, #attemptsChart {
+    max-width: 300px;
+    max-height: 300px;
+}
+</style>
+</head>
+<body>
+
+    <h1>User Study Data</h1>
+
+    <div class="container">
+        <!-- User Study Data Chart -->
+        <div class="chart-container">
+            <h2>User Overview</h2>
+            <canvas id="studyChart"></canvas>
+        </div>
+
+        <!-- Time Spent per Topic Chart -->
+        <div class="chart-container">
+            <h2>Time Spent per Topic</h2>
+            <canvas id="topicChart"></canvas>
+        </div>
+
+        <!-- Average Score per Module Chart -->
+        <div class="chart-container">
+            <h2>Average Score per Module</h2>
+            <canvas id="scoreChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h2>Quiz Performance</h2>
+            <div class="gauge-container">
+                <div class="info-container">
+                    <p id="subjectName">Subject: Loading...</p>
+                    <p id="avgScore">Average Score: --</p>
+                </div>
+                <canvas id="gaugeChart" width="300" height="150"></canvas>
+                <div class="arrow" id="arrow"></div>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h2>No of Attempts per module</h2>
+            <canvas id="attemptsChart"></canvas>
+        </div>
+            
+    </div>
+
+</body>
+</html>

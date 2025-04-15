@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Admin Login</h2>
+        <input type="email" id="loginEmail" placeholder="Enter your email">
+        <input type="password" id="loginPassword" placeholder="Enter your password">
+        <button onclick="loginUser()">Login</button>
+        <p>Don't have an account? <a href="admin_register.html">Sign Up</a></p>
+        <p id="loginMessage"></p>
+    </div>
+
+    <script>
+        async function loginUser() {
+            const email = document.getElementById("loginEmail").value.trim();
+            const password = document.getElementById("loginPassword").value.trim();
+            const messageBox = document.getElementById("loginMessage");
+
+            // ✅ Validation Check
+            if (!email || !password) {
+                messageBox.innerText = "Email and password are required!";
+                messageBox.style.color = "red";
+                return;
+            }
+
+            try {
+                let response = await fetch("http://localhost:5000/teacherlogin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+
+                let data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem("teacherId", data.teacherId); // ✅ Ensure correct key
+                    window.location.href = "tasks.html"; // ✅ Redirect on success
+                } else {
+                    messageBox.innerText = data.message;
+                    messageBox.style.color = "red"; // ✅ Display error message
+                }
+            } catch (error) {
+                console.error("Login error:", error);
+                messageBox.innerText = "Failed to connect to server.";
+                messageBox.style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>

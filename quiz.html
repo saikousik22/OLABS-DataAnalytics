@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pythagoras Theorem Quiz</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    margin: 0;
+}
+
+.quiz-container {
+    width: 50%;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+    text-align: left;
+}
+
+.question {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 10px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+#scoreDisplay {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+#feedback {
+    background-color: #ff9800;
+}
+
+#feedback:hover {
+    background-color: #e68900;
+}
+
+textarea {
+    height: 100px;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+    </style>
+</head>
+<body>
+
+    <h1>Pythagoras Theorem Quiz</h1>
+    
+    <div class="quiz-container">
+        <form id="quizForm">
+            <div class="question">
+                <p>1. What is the Pythagorean Theorem formula?</p>
+                <input type="radio" name="q1" value="a² + b² = c²"> a² + b² = c²<br>
+                <input type="radio" name="q1" value="a² - b² = c²"> a² - b² = c²<br>
+                <input type="radio" name="q1" value="a² + b² = 2c²"> a² + b² = 2c²<br>
+            </div>
+
+            <div class="question">
+                <p>2. If a right triangle has legs of 6 and 8, what is the hypotenuse?</p>
+                <input type="radio" name="q2" value="10"> 10<br>
+                <input type="radio" name="q2" value="12"> 12<br>
+                <input type="radio" name="q2" value="14"> 14<br>
+            </div>
+
+            <div class="question">
+                <p>3. If a right triangle has legs of 5 and 12, what is the hypotenuse?</p>
+                <input type="radio" name="q3" value="10"> 10<br>
+                <input type="radio" name="q3" value="13"> 13<br>
+                <input type="radio" name="q3" value="15"> 15<br>
+            </div>
+
+            <div class="question">
+                <p>4. If the hypotenuse is 13 and one leg is 5, what is the other leg?</p>
+                <input type="radio" name="q4" value="10"> 10<br>
+                <input type="radio" name="q4" value="12"> 12<br>
+                <input type="radio" name="q4" value="8"> 8<br>
+            </div>
+
+            <div class="question">
+                <p>5. A triangle has legs of 9 and 12. Find the hypotenuse.</p>
+                <input type="radio" name="q5" value="15"> 15<br>
+                <input type="radio" name="q5" value="16"> 16<br>
+                <input type="radio" name="q5" value="18"> 18<br>
+            </div>
+
+            <div class="question">
+                <p>6. In a right triangle, if the hypotenuse is 17 and one leg is 8, find the other leg.</p>
+                <input type="radio" name="q6" value="15"> 15<br>
+                <input type="radio" name="q6" value="12"> 12<br>
+                <input type="radio" name="q6" value="9"> 9<br>
+            </div>
+
+            <div class="question">
+                <p>7. If a right triangle has sides of 7 and 24, find the hypotenuse.</p>
+                <input type="radio" name="q7" value="25"> 25<br>
+                <input type="radio" name="q7" value="26"> 26<br>
+                <input type="radio" name="q7" value="27"> 27<br>
+            </div>
+
+            <div class="question">
+                <p>8. Can a triangle with sides 8, 15, and 18 be a right triangle?</p>
+                <input type="radio" name="q8" value="Yes"> Yes<br>
+                <input type="radio" name="q8" value="No"> No<br>
+            </div>
+
+            <div class="question">
+                <p>9. The hypotenuse of a right triangle is always the _____ side.</p>
+                <input type="radio" name="q9" value="longest"> longest<br>
+                <input type="radio" name="q9" value="shortest"> shortest<br>
+                <input type="radio" name="q9" value="middle-length"> middle-length<br>
+            </div>
+
+            <div class="question">
+                <p>10. The Pythagorean Theorem applies to which type of triangle?</p>
+                <input type="radio" name="q10" value="Right triangle"> Right triangle<br>
+                <input type="radio" name="q10" value="Equilateral triangle"> Equilateral triangle<br>
+                <input type="radio" name="q10" value="Isosceles triangle"> Isosceles triangle<br>
+            </div>
+
+            <button type="button" id="evaluateBtn">Self Evaluate</button>
+            <button type="button" id="feedback">Feedback</button>
+
+            </div>            
+        </form>
+
+        <p id="scoreDisplay"></p>
+
+    </div>
+    <script>
+          document.getElementById("feedback").onclick = function () {
+    window.open("Personalized Quiz Evaluation.pdf", "_blank");
+  };
+
+        document.addEventListener("DOMContentLoaded", function () {
+    let userId = localStorage.getItem("userId");
+    let moduleId = localStorage.getItem("currentModule");
+
+    if (!userId || !moduleId) {
+        alert("User ID or Module ID not found! Please log in.");
+        return;
+    }
+
+    document.getElementById("evaluateBtn").addEventListener("click", function () {
+        let score = calculateScore();
+        let attempt = 1; // First attempt
+
+        document.getElementById("scoreDisplay").innerText = `Your Score: ${score}/10`;
+
+        let quizData = {
+            userId: userId,
+            moduleId: moduleId,
+            attempt: attempt,
+            score: score
+        };
+
+        let answersList = [];
+
+        let correctAnswers = {
+            q1: "a² + b² = c²",
+            q2: "10",
+            q3: "13",
+            q4: "12",
+            q5: "15",
+            q6: "15",
+            q7: "25",
+            q8: "No",
+            q9: "longest",
+            q10: "Right triangle"
+        };
+
+        for (let key in correctAnswers) {
+            let selected = document.querySelector(`input[name="${key}"]:checked`);
+            let questionElement = document.querySelector(`input[name="${key}"]`).closest('.question').querySelector('p');
+            let questionText = questionElement ? questionElement.innerText : "Question not found";
+
+            let userAnswer = selected ? selected.value : "Not Answered";
+
+            answersList.push({
+                question: questionText, 
+                correctAnswer: correctAnswers[key], 
+                userAnswer: userAnswer
+            });
+        }
+
+        // Send answers list to /chatbot
+        fetch(`http://localhost:5000/chatbot`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ answers: answersList })
+        })
+        .then(response => response.json())
+        .then(data => console.log("Quiz responses submitted:", data))
+        .catch(error => console.error("Error submitting quiz responses:", error));
+
+        // Send score data to backend
+        fetch(`http://localhost:5000/storeQuizScore/${userId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(quizData)
+        })
+        .then(response => response.json())
+        .then(data => console.log("Quiz score submitted:", data))
+        .catch(error => console.error("Error submitting quiz score:", error));
+    });
+});
+
+function calculateScore() {
+    let correctAnswers = {
+        q1: "a² + b² = c²",
+        q2: "10",
+        q3: "13",
+        q4: "12",
+        q5: "15",
+        q6: "15",
+        q7: "25",
+        q8: "No",
+        q9: "longest",
+        q10: "Right triangle"
+    };
+
+    let score = 0;
+    for (let key in correctAnswers) {
+        let selected = document.querySelector(`input[name="${key}"]:checked`);
+        if (selected && selected.value === correctAnswers[key]) {
+            score++;
+        }
+    }
+    return score;
+}
+
+    </script>
+    
+</body>
+</html>

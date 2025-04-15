@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics Topics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .physics-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #0b3d91;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 20px;
+            font-size: 22px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        button {
+            background-color: #1257a169;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, background 0.3s;
+            min-width: 200px;
+        }
+
+        button:hover {
+            background-color: #3d88d8;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <img src="physics" alt="Physics" class="physics-image">
+    <h1>Physics Topics</h1>
+
+    <h2>Class 12</h2>
+    <div class="button-container">
+        <button onclick="startActivity('p5')">Zener Diode</button>
+        <button onclick="startActivity('p6')">AC Sonometer</button>
+    </div>
+
+    <h2>Class 11</h2>
+    <div class="button-container">
+        <button onclick="startActivity('p3')">Simple Pendulum</button>
+        <button onclick="startActivity('p4')">Vernier Calipers</button>
+    </div>
+
+    <h2>Class 10</h2>
+    <div class="button-container">
+        <button onclick="startActivity('p1')">Projectile Motion</button>
+        <button onclick="startActivity('p2')">Magnetic Fields</button>
+    </div>
+
+    <script src="activity.js"></script>
+</body>
+</html>

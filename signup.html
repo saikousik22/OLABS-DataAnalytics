@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Sign Up</h2>
+        <input type="text" id="regUsername" placeholder="Enter your username">
+        <input type="email" id="regEmail" placeholder="Enter your email">
+        <input type="text" id="regMobile" placeholder="Enter your mobile number">
+        <input type="password" id="regPassword" placeholder="Enter your password">
+        <button onclick="registerUser()">Sign Up</button>
+        <p>Already have an account? <a href="index.html">Login</a></p>
+        <p id="signupMessage"></p>
+    </div>
+
+    <script>
+        async function registerUser() {
+            const username = document.getElementById("regUsername").value.trim();
+            const email = document.getElementById("regEmail").value.trim();
+            const mobile = document.getElementById("regMobile").value.trim();
+            const password = document.getElementById("regPassword").value.trim();
+            const messageBox = document.getElementById("signupMessage");
+
+            // ✅ Basic Validation
+            if (!username || !email || !mobile || !password) {
+                messageBox.innerText = "All fields are required!";
+                messageBox.style.color = "red";
+                return;
+            }
+
+            if (mobile.length !== 10 || isNaN(mobile)) {
+                messageBox.innerText = "Enter a valid 10-digit mobile number!";
+                messageBox.style.color = "red";
+                return;
+            }
+
+            try {
+                let response = await fetch("http://localhost:5000/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, email, mobile, password })
+                });
+
+                let data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem("userId", data.userId); // ✅ Ensure correct key
+                    console.log("User ID stored:", data.userId);
+                    window.location.href = "dashboard.html"; // ✅ Redirect on success
+                } else {
+                    messageBox.innerText = data.message;
+                    messageBox.style.color = "red"; // ✅ Show error message in red
+                }
+            } catch (error) {
+                console.error("Signup error:", error);
+                messageBox.innerText = "Failed to connect to server.";
+                messageBox.style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>

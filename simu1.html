@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Projectile Motion Simulator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 1000px;
+            width: 95%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00ff88;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+            margin-bottom: 30px;
+        }
+
+        canvas {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            color: #00ff88;
+            font-size: 0.9em;
+        }
+
+        input[type="number"] {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #00ff88;
+            border-radius: 5px;
+            padding: 8px;
+            color: white;
+            width: 100%;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #00ff88;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+
+        #shootButton {
+            background: #00ff88;
+            color: #1a1a2e;
+        }
+
+        #pauseButton {
+            background: #ff9100;
+            color: #1a1a2e;
+        }
+
+        #resetButton {
+            background: #ff3366;
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .info-panel {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            text-align: center;
+            padding: 10px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 5px;
+        }
+
+        .stats-label {
+            font-size: 0.8em;
+            color: #00ff88;
+        }
+
+        .stats-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        #trail-toggle {
+            background: #4a90e2;
+            color: white;
+        }
+        .learning-steps {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            width: 80%;
+            text-align: left;
+        }
+
+        .learning-steps h2 {
+            color: #00ff88;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        .learning-steps ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .learning-steps li {
+            margin: 10px 0;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+        }
+
+        .learning-steps input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Advanced Projectile Motion Simulator</h1>
+        <canvas id="projectileCanvas" width="1000" height="500"></canvas>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="launchHeight">Initial Height (m)</label>
+                <input type="number" id="launchHeight" value="4" step="0.1" min="0">
+            </div>
+            <div class="control-group">
+                <label for="launchVelocity">Initial Velocity (m/s)</label>
+                <input type="number" id="launchVelocity" value="7" step="0.1" min="0">
+            </div>
+            <div class="control-group">
+                <label for="launchAngle">Launch Angle (°)</label>
+                <input type="number" id="launchAngle" value="45" step="1" min="0" max="90">
+            </div>
+            <div class="control-group">
+                <label for="speedSlider">Animation Speed: <span id="speedValue">1.0</span>x</label>
+                <input type="range" id="speedSlider" min="0.1" max="3" step="0.1" value="1">
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button id="shootButton">LAUNCH</button>
+            <button id="pauseButton">PAUSE</button>
+            <button id="resetButton">RESET</button>
+            <button id="trail-toggle">TOGGLE TRAIL</button>
+            <button id="completeButton1" onclick="storeHelpCount()">Complete Activity</button>
+            <button id="helpButton" onclick="incrementHelpCount()">Help</button>
+        </div>
+        <div class="learning-steps">
+            <h2>Learning Steps (Complete all steps)</h2>
+            <ul>
+                <li><input type="checkbox" class="step-checkbox" onchange="calculateCompletion()"> Set Initial Parameters: Adjust the launch height, velocity, and angle using the controls.</li>
+                <li><input type="checkbox" class="step-checkbox" onchange="calculateCompletion()"> Launch the Projectile: Click the LAUNCH button to start the simulation.</li>
+                <li><input type="checkbox" class="step-checkbox" onchange="calculateCompletion()"> Analyze Trajectory: Note the path and maximum height.</li>
+                <li><input type="checkbox" class="step-checkbox" onchange="calculateCompletion()"> Review Statistics: Check time of flight, range, and velocity.</li>
+            </ul>
+            <p>Completion: <span id="completionPercentage">0%</span></p>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-item">
+                <div class="stats-label">Time of Flight</div>
+                <div class="stats-value" id="timeValue">0.00 s</div>
+            </div>
+            <div class="info-item">
+                <div class="stats-label">Current Height</div>
+                <div class="stats-value" id="heightValue">0.00 m</div>
+            </div>
+            <div class="info-item">
+                <div class="stats-label">Distance</div>
+                <div class="stats-value" id="distanceValue">0.00 m</div>
+            </div>
+            <div class="info-item">
+                <div class="stats-label">Velocity</div>
+                <div class="stats-value" id="velocityValue">0.00 m/s</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('projectileCanvas');
+        const ctx = canvas.getContext('2d');
+        const g = 9.81;
+        const scale = 40;
+
+        let y0 = 4, v0 = 7, theta = 45;
+        let isPaused = false, showTrail = true;
+        let animationFrameId;
+        let t = 0, speed = 1;
+        let trail = [];
+        const maxTrailLength = 50;
+
+        function drawGrid() {
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.lineWidth = 0.5;
+
+            // Draw vertical grid lines
+            for (let x = 0; x <= canvas.width; x += scale) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+
+            // Draw horizontal grid lines
+            for (let y = 0; y <= canvas.height; y += scale) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+        }
+
+        function drawGround() {
+            const groundY = canvas.height - 10;
+            ctx.beginPath();
+            ctx.moveTo(0, groundY);
+            ctx.lineTo(canvas.width, groundY);
+            ctx.strokeStyle = '#00ff88';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw ground texture
+            for (let x = 0; x < canvas.width; x += 20) {
+                ctx.beginPath();
+                ctx.moveTo(x, groundY);
+                ctx.lineTo(x + 10, groundY + 5);
+                ctx.strokeStyle = 'rgba(0, 255, 136, 0.5)';
+                ctx.stroke();
+            }
+        }
+
+        function drawTrajectory() {
+            const rad = theta * Math.PI / 180;
+            const v0x = v0 * Math.cos(rad);
+            const v0y = v0 * Math.sin(rad);
+            const t_flight = (v0y + Math.sqrt(v0y ** 2 + 2 * g * y0)) / g;
+
+            ctx.beginPath();
+            ctx.setLineDash([5, 5]);
+            ctx.moveTo(0, canvas.height - y0 * scale);
+            
+            for (let t = 0; t <= t_flight; t += 0.1) {
+                const x = v0x * t;
+                const y = y0 + v0y * t - 0.5 * g * t ** 2;
+                ctx.lineTo(x * scale, canvas.height - y * scale);
+            }
+
+            ctx.strokeStyle = 'rgba(0, 255, 136, 0.3)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function drawProjectile(x, y) {
+            // Draw shadow
+            ctx.beginPath();
+            ctx.ellipse(x * scale, canvas.height - 10, 10, 4, 0, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.fill();
+
+            // Draw projectile
+            ctx.beginPath();
+            ctx.arc(x * scale, canvas.height - y * scale, 8, 0, Math.PI * 2);
+            const gradient = ctx.createRadialGradient(
+                x * scale - 3, canvas.height - y * scale - 3, 0,
+                x * scale, canvas.height - y * scale, 8
+            );
+            gradient.addColorStop(0, '#fff');
+            gradient.addColorStop(1, '#00ff88');
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            ctx.strokeStyle = '#00ff88';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Add motion blur effect
+            if (showTrail) {
+                trail.forEach((pos, index) => {
+                    const alpha = index / trail.length * 0.3;
+                    ctx.beginPath();
+                    ctx.arc(pos.x * scale, canvas.height - pos.y * scale, 4, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(0, 255, 136, ${alpha})`;
+                    ctx.fill();
+                });
+            }
+        }
+
+        function updateInfoPanel(x, y, time) {
+            const rad = theta * Math.PI / 180;
+            const v0x = v0 * Math.cos(rad);
+            const v0y = v0 * Math.sin(rad);
+            const vy = v0y - g * time;
+            const currentVelocity = Math.sqrt(v0x * v0x + vy * vy);
+
+            document.getElementById('timeValue').textContent = `${time.toFixed(2)} s`;
+            document.getElementById('heightValue').textContent = `${y.toFixed(2)} m`;
+            document.getElementById('distanceValue').textContent = `${x.toFixed(2)} m`;
+            document.getElementById('velocityValue').textContent = `${currentVelocity.toFixed(2)} m/s`;
+        }
+
+        function animate() {
+            if (isPaused) return;
+
+            const rad = theta * Math.PI / 180;
+            const v0x = v0 * Math.cos(rad);
+            const v0y = v0 * Math.sin(rad);
+            const t_flight = (v0y + Math.sqrt(v0y ** 2 + 2 * g * y0)) / g;
+
+            if (t > t_flight) {
+                cancelAnimationFrame(animationFrameId);
+                return;
+            }
+
+            const x = v0x * t;
+            const y = y0 + v0y * t - 0.5 * g * t ** 2;
+
+            // Update trail
+            trail.push({ x, y });
+            if (trail.length > maxTrailLength) {
+                trail.shift();
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+            drawGround();
+            drawTrajectory();
+            drawProjectile(x, y);
+            updateInfoPanel(x, y, t);
+
+            t += 0.05 * speed;
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        document.getElementById('shootButton').addEventListener('click', () => {
+            y0 = parseFloat(document.getElementById('launchHeight').value);
+            v0 = parseFloat(document.getElementById('launchVelocity').value);
+            theta = parseFloat(document.getElementById('launchAngle').value);
+            isPaused = false;
+            t = 0;
+            trail = [];
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            animate();
+        });
+
+        document.getElementById('pauseButton').addEventListener('click', () => {
+            isPaused = !isPaused;
+            document.getElementById('pauseButton').textContent = isPaused ? 'RESUME' : 'PAUSE';
+            if (!isPaused) animate();
+        });
+
+        document.getElementById('resetButton').addEventListener('click', () => {
+            document.getElementById('launchHeight').value = 4;
+            document.getElementById('launchVelocity').value = 7;
+            document.getElementById('launchAngle').value = 45;
+            document.getElementById('speedSlider').value = 1;
+            document.getElementById('speedValue').textContent = "1.0";
+            y0 = 4;
+            v0 = 7;
+            theta = 45;
+            speed = 1;
+            isPaused = false;
+            t = 0;
+            trail = [];
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawGrid();
+            drawGround();
+            drawTrajectory();
+            updateInfoPanel(0, y0, 0);
+        });
+
+        document.getElementById('trail-toggle').addEventListener('click', () => {
+            showTrail = !showTrail;
+            document.getElementById('trail-toggle').textContent = showTrail ? 'HIDE TRAIL' : 'SHOW TRAIL';
+            document.getElementById('trail-toggle').style.background = showTrail ? '#4a90e2' : '#666';
+        });
+
+        document.getElementById('speedSlider').addEventListener('input', (event) => {
+            speed = parseFloat(event.target.value);
+            document.getElementById('speedValue').textContent = speed.toFixed(1);
+        });
+
+        // Add keyboard controls
+        document.addEventListener('keydown', (event) => {
+            switch(event.key) {
+                case ' ':  // Space bar
+                    document.getElementById('shootButton').click();
+                    break;
+                case 'p':  // P key
+                    document.getElementById('pauseButton').click();
+                    break;
+                case 'r':  // R key
+                    document.getElementById('resetButton').click();
+                    break;
+                case 't':  // T key
+                    document.getElementById('trail-toggle').click();
+                    break;
+                case 'ArrowUp':
+                    if (event.shiftKey) {
+                        const vel = parseFloat(document.getElementById('launchVelocity').value);
+                        document.getElementById('launchVelocity').value = (vel + 0.5).toFixed(1);
+                    } else {
+                        const angle = parseFloat(document.getElementById('launchAngle').value);
+                        document.getElementById('launchAngle').value = Math.min(90, angle + 5);
+                    }
+                    break;
+                case 'ArrowDown':
+                    if (event.shiftKey) {
+                        const vel = parseFloat(document.getElementById('launchVelocity').value);
+                        document.getElementById('launchVelocity').value = Math.max(0, vel - 0.5).toFixed(1);
+                    } else {
+                        const angle = parseFloat(document.getElementById('launchAngle').value);
+                        document.getElementById('launchAngle').value = Math.max(0, angle - 5);
+                    }
+                    break;
+            }
+        });
+
+        // Add touch events for mobile devices
+        let touchStartY = 0;
+        canvas.addEventListener('touchstart', (event) => {
+            touchStartY = event.touches[0].clientY;
+        });
+
+        canvas.addEventListener('touchmove', (event) => {
+            event.preventDefault();
+            const touchY = event.touches[0].clientY;
+            const deltaY = touchStartY - touchY;
+            
+            const angle = parseFloat(document.getElementById('launchAngle').value);
+            const newAngle = angle + (deltaY * 0.5);
+            document.getElementById('launchAngle').value = Math.min(90, Math.max(0, newAngle));
+            
+            touchStartY = touchY;
+        });
+
+        // Add mouse wheel control for velocity
+        canvas.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            const vel = parseFloat(document.getElementById('launchVelocity').value);
+            const delta = event.deltaY > 0 ? -0.5 : 0.5;
+            document.getElementById('launchVelocity').value = Math.max(0, vel + delta).toFixed(1);
+        });
+
+        // Initial setup
+        function init() {
+            drawGrid();
+            drawGround();
+            drawTrajectory();
+            updateInfoPanel(0, y0, 0);
+
+            // Add tooltip for controls
+            const tooltip = document.createElement('div');
+            tooltip.style.position = 'fixed';
+            tooltip.style.bottom = '10px';
+            tooltip.style.left = '50%';
+            tooltip.style.transform = 'translateX(-50%)';
+            tooltip.style.background = 'rgba(0, 0, 0, 0.8)';
+            tooltip.style.color = '#fff';
+            tooltip.style.padding = '10px';
+            tooltip.style.borderRadius = '5px';
+            tooltip.style.fontSize = '0.8em';
+            tooltip.innerHTML = `
+                Keyboard Controls:<br>
+                Space: Launch | P: Pause | R: Reset | T: Toggle Trail<br>
+                ↑↓: Adjust Angle | Shift + ↑↓: Adjust Velocity<br>
+                Mouse Wheel: Adjust Velocity
+            `;
+            document.body.appendChild(tooltip);
+
+            // Hide tooltip after 5 seconds
+            setTimeout(() => {
+                tooltip.style.opacity = '0';
+                tooltip.style.transition = 'opacity 1s';
+                setTimeout(() => tooltip.remove(), 1000);
+            }, 5000);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const container = document.querySelector('.container');
+            const containerWidth = container.clientWidth;
+            canvas.width = Math.min(1000, containerWidth - 40);
+            canvas.height = canvas.width * 0.5;
+            init();
+        });
+
+        function calculateCompletion() {
+    let checkboxes = document.querySelectorAll('.step-checkbox');
+    let completed = Array.from(checkboxes).filter(cb => cb.checked).length;
+    let total = checkboxes.length;
+    let percentage = (completed / total) * 100;
+    document.getElementById('completionPercentage').textContent = `${percentage.toFixed(0)}%`;
+
+    // Store the percentage in localStorage to use later
+    localStorage.setItem("completionPercentage", percentage.toFixed(0));}
+
+    // Retrieve the previous help count or initialize to 0
+let helpCount = 0; 
+
+function incrementHelpCount() {
+    helpCount++; // Increase count on each button click
+    console.log("Help button clicked. Current Count:", helpCount);
+}
+
+// When the "Close Activity" button is clicked, store the final count
+function storeHelpCount() {
+    localStorage.setItem("helpCount", helpCount);
+    console.log("Final Help Count Stored:", helpCount);
+}
+
+
+        init();
+    </script>
+    <script src="simulation_end.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    background: url('https://wallpaperaccess.com/full/2384075.jpg')no-repeat center center/cover;
+}
+
+h2 {
+    color: #000000;
+    font-size: 24px;
+    margin-top: 30px;
+}
+
+#completeButton, button {
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    margin: 10px 0;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Style for "Complete Activity" button */
+#completeButton {
+    background-color: #0b3d91;
+    color: white;
+}
+
+/* Style for "Take Quiz" button */
+button {
+    background-color: #28a745;
+    color: white;
+}
+
+/* Hover effect */
+#completeButton:hover, button:hover {
+    transform: scale(1.05);
+    background-color: #0056b3; /* Darker blue for "Complete Activity" */
+}
+
+/* Link styling for "Take Quiz" */
+a {
+    text-decoration: none;
+}
+
+/* Center all elements */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+/* Ensure a clean look and proper alignment */
+#completeButton, button {
+    width: 200px;
+}
+</style>
+
+<button id="completeButton">Complete Activity</button>
+<h2>Test Your Pythagoras Theorem Knowledge!</h2>
+<a href="quiz.html">
+    <button>Take Quiz</button>
+</a>
+<script src="end.js">
+    
+</script>
